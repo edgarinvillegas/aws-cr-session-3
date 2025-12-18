@@ -1,0 +1,26 @@
+name: Create EC2 Instance
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required for OIDC
+      contents: read # Required to checkout the repo
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/rol-githubconnect
+          aws-region: us-east-1
+      - name: Deployar pila Cloudformation
+        run: |
+          aws cloudformation deploy \
+            --template-file cf-template.yaml \
+            --stack-name mi-stack-ec2 \
+            --no-fail-on-empty-changeset
