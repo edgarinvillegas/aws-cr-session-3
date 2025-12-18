@@ -22,5 +22,5 @@ jobs:
         run: |
           aws cloudformation deploy \
             --template-file cf-template.yaml \
-            --stack-name mi-stack-ec2 \
+            --stack-name mi-stack-ec2b \
             --no-fail-on-empty-changeset
